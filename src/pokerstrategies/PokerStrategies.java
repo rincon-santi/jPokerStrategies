@@ -14,8 +14,7 @@ import javax.swing.JOptionPane;
 import org.poker.api.game.IStrategy;
 import org.poker.gui.ImageManager;
 import org.poker.main.MainController;
-import org.poker.sample.strategies.PlayerStrategy;
-import org.poker.sample.strategies.RandomStrategy;
+import org.poker.sample.strategies.*;
 import strategies.UserStrategy1;
 import strategies.UserStrategy2;
 
@@ -35,7 +34,9 @@ public class PokerStrategies {
         };
         String [] opts_for_pl2={
             "My Strategy 2",
-            "Expert Bot"
+            "Agressive Expert Bot",
+            "Laid-back Expert Bot",
+            "Random Bot"
         };
         String [] modes={
             "Visual",
@@ -63,7 +64,7 @@ public class PokerStrategies {
                     }
                     break;
                 case "My Strategy 1":
-                    pl1=new RandomStrategy("1");
+                    pl1=new UserStrategy1();
                     boolean welDone=false;
                     while(!welDone) try{
                         welDone=true;
@@ -89,13 +90,45 @@ public class PokerStrategies {
                 case "My Strategy 2":
                     pl2=new UserStrategy2();
                     break;
-                case "Expert Bot":
-                    pl2=new RandomStrategy("2");
+                case "Agressive Expert Bot":
+                    pl2=new AgressiveExpertBot();
+                    break;
+                case "Laid-back Expert Bot":
+                    pl2=new LaidBackExpertBot();
+                    break;
+                case "Random Bot":
+                    pl2=new RandomStrategy();
                     break;
                 default:
                     System.exit(0);
             }
-            Map<String,Double> scores=MainController.run(pl1, pl2, mode, rounds);
+            boolean welDone=false;
+            long BB=0L;
+            while(!welDone){
+                 try{
+                        welDone=true;
+                        BB = Long.parseLong(JOptionPane.showInputDialog(null, "Select number of chips for Big Blind", "Big Blind", JOptionPane.DEFAULT_OPTION), 10);
+                    }catch(Exception e){
+                        welDone=false;
+                        JOptionPane.showMessageDialog(null, "Please introduce a valid number", "Error", JOptionPane.ERROR_MESSAGE); 
+                    }
+            }
+            welDone=false;
+            long NoBB=0L;
+            while(!welDone){
+                 try{
+                        welDone=true;
+                        NoBB = Long.parseLong(JOptionPane.showInputDialog(null, "How many Big Blinds as number of start chips? (between 5 and 20)", "Start Chips", JOptionPane.DEFAULT_OPTION), 10);
+                        if ((NoBB>20L)||(NoBB<5L)){
+                            welDone=false;
+                            JOptionPane.showMessageDialog(null, "Please introduce a number between 5 and 20", "Error", JOptionPane.ERROR_MESSAGE); 
+                        }
+                 }catch(Exception e){
+                        welDone=false;
+                        JOptionPane.showMessageDialog(null, "Please introduce a valid number", "Error", JOptionPane.ERROR_MESSAGE); 
+                    }
+            }
+            Map<String,Double> scores=MainController.run(pl1, pl2, mode, rounds, BB, NoBB);
             JOptionPane.showMessageDialog(null, "First player won "+scores.get(pl1.getName()).toString()+" rounds and second player won "+scores.get(pl2.getName()).toString()+" rounds", "Result", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             Logger.getLogger(PokerStrategies.class.getName()).log(Level.SEVERE, null, ex);

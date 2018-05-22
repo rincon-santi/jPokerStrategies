@@ -25,6 +25,8 @@ import org.poker.api.game.BetCommand;
 import org.poker.api.game.GameInfo;
 import org.poker.api.game.IStrategy;
 import org.poker.api.game.PlayerInfo;
+import org.poker.api.game.TexasHoldEmUtil;
+import org.poker.api.game.TexasHoldEmUtil.BetCommandType;
 
 /**
  *
@@ -121,7 +123,7 @@ public class UserStrategy2 implements IStrategy{
         //Utilizando la información sobre la partida que puedes obtener con los
         //métodos y funciones ya comentados, se estima información suficiente
         //para elaborar un algoritmo efectivo de juego.
-        return null;
+        return new BetCommand(BetCommandType.FOLD);
     }
 
     @Override
