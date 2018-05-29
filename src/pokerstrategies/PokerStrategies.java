@@ -64,7 +64,7 @@ public class PokerStrategies {
                     }
                     break;
                 case "My Strategy 1":
-                    pl1=new AgressiveExpertBot();
+                    pl1=new UserStrategy1();
                     boolean welDone=false;
                     while(!welDone) try{
                         welDone=true;
